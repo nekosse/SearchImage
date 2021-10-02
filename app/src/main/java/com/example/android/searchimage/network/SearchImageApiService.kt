@@ -17,26 +17,36 @@
 
 package com.example.android.marsrealestate.network
 
+import com.example.android.searchimage.network.imageProperty
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Headers
+import retrofit2.http.Query
 
 
 private const val BASE_URL = "https://pixabay.com"
 private const val KEY = "18021445-326cf5bcd3658777a9d22df6f"
 
 
+private val moshi = Moshi.Builder()
+    .add(KotlinJsonAdapterFactory())
+    .build()
+
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(ScalarsConverterFactory.create())
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
     .build()
 
 interface SearchApiService {
-    @GET("api/?key=$KEY&image_type=photo")
-    fun getProperties():
-            Call<String>
+    @GET("api/")
+    fun getImageDetails(
+        @Query("key") key:String,
+        @Query("q") query:String,
+        @Query("image_type") image_type:String)
+        : Call<imageProperty>
 }
 
 object SearchApi {
