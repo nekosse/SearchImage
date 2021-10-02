@@ -11,6 +11,11 @@ import retrofit2.Response
 
 class SearchViewModel : ViewModel() {
 
+    companion object {
+        private const val KEY = "18021445-326cf5bcd3658777a9d22df6f"
+    }
+
+
     private val _response = MutableLiveData<String>()
     val response: LiveData<String>
     get() = _response
@@ -18,14 +23,14 @@ class SearchViewModel : ViewModel() {
      * Call getSearchRealEstateProperties() on init so we can display status immediately.
      */
     init {
-        getSearchRealEstateProperties()
     }
+
 
     /**
      * Sets the value of the response
      */
-    private fun getSearchRealEstateProperties() {
-        SearchApi.retrofitService.getImageDetails("18021445-326cf5bcd3658777a9d22df6f","yellow","photo").enqueue( object: Callback<imageProperty> {
+     fun displayResponseNumber(query:String) {
+        SearchApi.retrofitService.getImageDetails("${KEY}",query,"photo").enqueue( object: Callback<imageProperty> {
             override fun onFailure(call: Call<imageProperty>, t: Throwable) {
                 _response.value = "Failure: " + t.message
             }
@@ -36,5 +41,6 @@ class SearchViewModel : ViewModel() {
         })
 
     }
+
 
 }

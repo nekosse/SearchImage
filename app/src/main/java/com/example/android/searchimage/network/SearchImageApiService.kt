@@ -28,7 +28,6 @@ import retrofit2.http.Query
 
 
 private const val BASE_URL = "https://pixabay.com"
-private const val KEY = "18021445-326cf5bcd3658777a9d22df6f"
 
 
 private val moshi = Moshi.Builder()
