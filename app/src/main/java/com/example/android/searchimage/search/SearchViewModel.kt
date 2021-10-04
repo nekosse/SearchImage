@@ -42,7 +42,7 @@ class SearchViewModel : ViewModel() {
     /**
      * Sets the value of the response+
      */
-     fun displayResponseNumber(query:String) {
+     fun displaySearchResponse(query:String) {
         coroutineScope.launch {
             var getPropertiesDeferred = SearchApi.retrofitService.getImageDetails(KEY,query,"IMAGE_TYPE")
             try {
