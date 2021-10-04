@@ -29,6 +29,7 @@ class SearchFragment : Fragment() {
         val binding = FragmentSearchBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        binding.photosList.adapter = ImageListAdapter()
         binding.searchButton.setOnClickListener {
                 viewModel.displayResponseNumber(binding.editTextTextPersonName.text.toString())
                 binding.invalidateAll()

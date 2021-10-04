@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android.marsrealestate.network.SearchApi
+import com.example.android.searchimage.network.ImageProperty
 import com.example.android.searchimage.network.SearchResponseProperty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,11 +18,16 @@ class SearchViewModel : ViewModel() {
 
     companion object {
         private const val KEY = "18021445-326cf5bcd3658777a9d22df6f"
+        private const val IMAGE_TYPE = "photo"
     }
 
 
-    private val _response = MutableLiveData<String>()
-    val response: LiveData<String>
+    private val _status = MutableLiveData<String>()
+    val status: LiveData<String>
+        get() = _status
+
+    private val _response = MutableLiveData<List<ImageProperty>>()
+    val response: LiveData<List<ImageProperty>>
     get() = _response
 
     private var viewModelJob = Job()
@@ -34,16 +40,16 @@ class SearchViewModel : ViewModel() {
 
 
     /**
-     * Sets the value of the response
+     * Sets the value of the response+
      */
      fun displayResponseNumber(query:String) {
         coroutineScope.launch {
-            var getPropertiesDeferred = SearchApi.retrofitService.getImageDetails("${KEY}",query,"photo")
+            var getPropertiesDeferred = SearchApi.retrofitService.getImageDetails(KEY,query,"IMAGE_TYPE")
             try {
                 var result = getPropertiesDeferred.await()
-                _response.value = "Success: ${result.total.toString()} Image retrieved"
+                _response.value = result.hits
             } catch (e: Exception) {
-                _response.value = "Failure: ${e.message}"
+                _status.value = "Failure: ${e.message}"
             }
         }
 
