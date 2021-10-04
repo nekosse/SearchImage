@@ -17,7 +17,7 @@
 
 package com.example.android.marsrealestate.network
 
-import com.example.android.searchimage.network.imageProperty
+import com.example.android.searchimage.network.SearchResponseProperty
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Call
@@ -45,7 +45,7 @@ interface SearchApiService {
         @Query("key") key:String,
         @Query("q") query:String,
         @Query("image_type") image_type:String)
-        : Call<imageProperty>
+        : Call<SearchResponseProperty>
 }
 
 object SearchApi {
