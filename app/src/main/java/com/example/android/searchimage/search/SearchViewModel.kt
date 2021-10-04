@@ -5,6 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android.marsrealestate.network.SearchApi
 import com.example.android.searchimage.network.SearchResponseProperty
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +23,9 @@ class SearchViewModel : ViewModel() {
     private val _response = MutableLiveData<String>()
     val response: LiveData<String>
     get() = _response
+
+    private var viewModelJob = Job()
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main )
     /**
      * Call getSearchRealEstateProperties() on init so we can display status immediately.
      */
@@ -30,17 +37,21 @@ class SearchViewModel : ViewModel() {
      * Sets the value of the response
      */
      fun displayResponseNumber(query:String) {
-        SearchApi.retrofitService.getImageDetails("${KEY}",query,"photo").enqueue( object: Callback<SearchResponseProperty> {
-            override fun onFailure(call: Call<SearchResponseProperty>, t: Throwable) {
-                _response.value = "Failure: " + t.message
+        coroutineScope.launch {
+            var getPropertiesDeferred = SearchApi.retrofitService.getImageDetails("${KEY}",query,"photo")
+            try {
+                var result = getPropertiesDeferred.await()
+                _response.value = "Success: ${result.total.toString()} Image retrieved"
+            } catch (e: Exception) {
+                _response.value = "Failure: ${e.message}"
             }
+        }
 
-            override fun onResponse(call: Call<SearchResponseProperty>, response: Response<SearchResponseProperty>) {
-                _response.value = "Success: ${response.body()?.total.toString()} Image retrieved"
-            }
-        })
 
     }
 
-
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
 }
