@@ -9,5 +9,18 @@
         android:id="@+id/searchFragment"
         android:name="com.example.android.searchimage.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_imageViewDetails"
+            app:destination="@id/imageViewDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageViewDetails"
+        android:name="com.example.android.searchimage.detail.ImageDetailsFragment"
+        android:label="fragment_image_view_details">
+        <argument
+            android:name="selectedProperty"
+            app:argType="com.example.android.searchimage.network.ImageProperty" />
+    </fragment>
+
 </navigation>

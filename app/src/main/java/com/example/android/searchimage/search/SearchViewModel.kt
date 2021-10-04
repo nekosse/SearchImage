@@ -30,6 +30,11 @@ class SearchViewModel : ViewModel() {
     val response: LiveData<List<ImageProperty>>
     get() = _response
 
+    private val _navigateToSelectedImage = MutableLiveData<ImageProperty>()
+
+    val navigateToSelectedImage: LiveData<ImageProperty>
+        get() = _navigateToSelectedImage
+
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main )
     /**
@@ -38,6 +43,13 @@ class SearchViewModel : ViewModel() {
     init {
     }
 
+    fun displayImageDetails(image: ImageProperty) {
+        _navigateToSelectedImage.value = image
+    }
+
+    fun displayImageDetailsComplete() {
+        _navigateToSelectedImage.value = null
+    }
 
     /**
      * Sets the value of the response+
