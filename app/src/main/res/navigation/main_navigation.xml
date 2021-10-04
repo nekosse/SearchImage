@@ -20,7 +20,7 @@
         android:label="fragment_image_view_details">
         <argument
             android:name="selectedProperty"
-            app:argType="com.example.android.searchimage.network.ImageProperty" />
+            app:argType="com.example.android.searchimage.network.ImageProperty[]" />
     </fragment>
 
 </navigation>

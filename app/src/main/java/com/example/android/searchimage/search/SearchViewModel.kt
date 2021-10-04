@@ -21,6 +21,10 @@ class SearchViewModel : ViewModel() {
         private const val IMAGE_TYPE = "photo"
     }
 
+    private val _eventDataLoadFinish = MutableLiveData<Boolean>()
+    val eventDataLoadFinish: LiveData<Boolean>
+        get() = _eventDataLoadFinish
+
 
     private val _status = MutableLiveData<String>()
     val status: LiveData<String>
@@ -30,9 +34,9 @@ class SearchViewModel : ViewModel() {
     val response: LiveData<List<ImageProperty>>
     get() = _response
 
-    private val _navigateToSelectedImage = MutableLiveData<ImageProperty>()
+    private val _navigateToSelectedImage = MutableLiveData<List<ImageProperty>>()
 
-    val navigateToSelectedImage: LiveData<ImageProperty>
+    val navigateToSelectedImage: LiveData<List<ImageProperty>>
         get() = _navigateToSelectedImage
 
     private var viewModelJob = Job()
@@ -43,7 +47,7 @@ class SearchViewModel : ViewModel() {
     init {
     }
 
-    fun displayImageDetails(image: ImageProperty) {
+    fun displayImageDetails(image: List<ImageProperty>) {
         _navigateToSelectedImage.value = image
     }
 
@@ -60,16 +64,28 @@ class SearchViewModel : ViewModel() {
             try {
                 var result = getPropertiesDeferred.await()
                 _response.value = result.hits
+                _eventDataLoadFinish.value = true
+
             } catch (e: Exception) {
                 _status.value = "Failure: ${e.message}"
             }
         }
+    }
 
+    /**
+     * Sets the value of the response+
+     */
+    fun clearSearchResponse() {
+        _response.value = null
 
     }
 
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+    fun loadFinishComplete(){
+        _eventDataLoadFinish.value = false
     }
 }

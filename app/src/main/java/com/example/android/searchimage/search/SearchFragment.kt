@@ -1,5 +1,6 @@
 package com.example.android.searchimage.search
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -21,7 +22,6 @@ import com.example.android.searchimage.network.ImageProperty
  */
 class SearchFragment : Fragment() {
 
-
     private val viewModel: SearchViewModel by lazy {
         ViewModelProvider(this).get(SearchViewModel::class.java)
     }
@@ -38,9 +38,18 @@ class SearchFragment : Fragment() {
         binding.viewModel = viewModel
         binding.photosList.adapter = listImageAdpaters
 
+        getActivity()?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
+        if(viewModel.response.value?.isNotEmpty() == true) {
+            binding.nextButton.visibility = View.VISIBLE
+        }
+
+
         binding.searchButton.setOnClickListener {
+                binding.imageView.visibility = View.VISIBLE
                 viewModel.displaySearchResponse(binding.editTextTextPersonName.text.toString())
                 binding.nextButton.visibility = View.VISIBLE
+
                 binding.invalidateAll()
         }
 
@@ -50,14 +59,25 @@ class SearchFragment : Fragment() {
                 Toast.makeText(context,"Vous devez selectionner au moins 2 images",Toast.LENGTH_SHORT).show()
             }
             else{
-                viewModel.displayImageDetails(listImageChecked[0])
+                viewModel.displayImageDetails(listImageChecked)
             }
         }
 
+
         viewModel.navigateToSelectedImage.observe(viewLifecycleOwner, Observer {
             if ( null != it ) {
-                this.findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToImageViewDetails(it))
+                this.findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToImageViewDetails(
+                    it.toTypedArray()
+                ))
                 viewModel.displayImageDetailsComplete()
+            }
+        })
+
+        //Disapear the loading animation when data are loading
+        viewModel.eventDataLoadFinish.observe(viewLifecycleOwner, Observer { loadFinish ->
+            if (loadFinish) {
+                binding.imageView.visibility = View.GONE
+                viewModel.loadFinishComplete()
             }
         })
 

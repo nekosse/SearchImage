@@ -8,6 +8,7 @@ import kotlinx.android.parcel.Parcelize
 data class ImageProperty (
         val id:Int,
         val previewURL:String,
+        val largeImageURL:String,
         val user:String
 ):Parcelable{
 

@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:text="@{property.user}" />
+                android:text="@{@string/creator_name_format(property.user)}" />
 
             <ImageView
                 android:id="@+id/data_image"

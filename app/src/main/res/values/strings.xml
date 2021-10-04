@@ -5,4 +5,8 @@
     <string name="Search_image">Search image by keyword</string>
     <string name="search">Search</string>
     <string name="Image_by">Image by</string>
+
+
+    <string name="creator_name_format">Upload by: %s</string>
+
 </resources>

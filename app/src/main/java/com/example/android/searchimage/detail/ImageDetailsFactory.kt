@@ -1,12 +1,13 @@
 package com.example.android.searchimage.detail
 
 import android.app.Application
+import androidx.annotation.NonNull
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.searchimage.network.ImageProperty
 
-class ImageDetailsFactory (
-    private val imageProperty: ImageProperty,
+class ImageDetailsFactory(
+    private val imageProperty: Array<ImageProperty>,
     private val application: Application
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")

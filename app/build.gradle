@@ -85,6 +85,9 @@ dependencies {
     // Core with Ktx
     implementation "androidx.core:core-ktx:$version_core"
 
+    //carousel
+    implementation 'com.synnapps:carouselview:0.1.4'
+
 
 
 
